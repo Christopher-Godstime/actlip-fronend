@@ -1,25 +1,25 @@
 import axios from "axios";
-const backend = "https://actlip.onrender.com";
+const backend = process.env.REACT_APP_BACKEND_URL;
 
 export const getDataApi = async (url) => {
-  const res = await axios.get(`/api/${url}`);
+  const res = await axios.get(`${backend}/api/${url}`);
   return res;
 };
 
 export const getNewsApi = async (url) => {
-  const res = await axios.get(`/api/${url}`);
+  const res = await axios.get(`${backend}/api/${url}`);
   return res;
 };
 
 export const postDataApi = async (url, post, token) => {
-  const res = await axios.post(`/api/${url}`, post, {
+  const res = await axios.post(`${backend}/api/${url}`, post, {
     headers: { Authorization: token },
   });
   return res;
 };
 
 export const putDataApi = async (url, post, token) => {
-  const res = await axios.put(`/api/${url}`, post, {
+  const res = await axios.put(`${backend}/api/${url}`, post, {
     headers: { Authorization: token },
   });
   return res;
