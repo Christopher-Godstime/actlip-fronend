@@ -30,47 +30,7 @@ function CardFooter({ post }) {
     navigator.clipboard.writeText(`${BASE_URL}/login/post/${post._id}`);
   };
 
-  return (
-    <div className="card_header font-poppins">
-      <div className="flex">
-        <div className="card_name ml-[5px]">
-          <small className="text-gray-500">
-            {moment(post.createdAt).fromNow()}
-          </small>
-        </div>
-      </div>
-
-      <div className="relative" onClick={() => setShow(!show)}>
-        <span className=" cursor-pointer" id="moreLink">
-          menu
-        </span>
-
-        {show ? (
-          <div className="absolute z-40 bg-white border border-gray-200 right-0 w-[150px] p-[10px] rounded-[3px]">
-            <div
-              className="flex text-[15px] items-center font-normal  mb-[15px]"
-              onClick={handleEditPost}
-            >
-              <h2>Edit post</h2>
-            </div>
-            <div
-              className="flex text-[15px] items-center font-normal  mb-[15px]"
-              onClick={handleDeletePost}
-            >
-              <h2>Remove post</h2>
-            </div>
-
-            <div
-              className="flex text-[15px] items-center font-normal "
-              onClick={handleCopyLink}
-            >
-              <h2>Copy Link</h2>
-            </div>
-          </div>
-        ) : null}
-      </div>
-    </div>
-  );
+  return <div></div>;
 }
 
 export default CardFooter;

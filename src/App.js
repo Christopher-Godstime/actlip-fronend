@@ -13,7 +13,7 @@ import NewsAndArticles from "./pages/news-and-articles";
 import ContactUs from "./pages/contact-us";
 import Dashboard from "./pages/dashboard";
 import Register from "./pages/register";
-
+import News from "./pages/news";
 import StatusModal from "./components/StatusModal";
 
 import { refreshToken } from "./redux/actions/authAction";
@@ -54,7 +54,7 @@ function App() {
         <Route exact path="/contact-us" component={ContactUs} />
         <Route exact path="/news-and-articles" component={NewsAndArticles} />
         <Route exact path="/register" component={Register} />
-
+        <Route exact path="/news-and-articles/:id" component={News} />
         {auth.token ? "" : <Footer show2={show2} setShow2={setShow2} />}
       </div>
 

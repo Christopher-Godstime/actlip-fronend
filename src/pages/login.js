@@ -93,16 +93,6 @@ const Login = () => {
                 </div>
               </div>
             </div>
-            <div className="flex  mt-[8px]">
-              <h4 className="text-xs font-medium text-gray-400">
-                Forgot your password?
-              </h4>
-              <h4 className="text-xs font-medium text-blue-400 border-b-[1px] ml-1 border-blue-400">
-                <Link className="hover:no-underline" to="/forgotpassword">
-                  Click here
-                </Link>
-              </h4>
-            </div>
 
             <div className=" mt-[64px]">
               <button

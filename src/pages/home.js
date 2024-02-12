@@ -47,7 +47,7 @@ const Home = () => {
                   duration: 0.5,
                   x: { duration: 1 },
                 }}
-                className="md:text-[35px] text-[30px] xl:text-[40px] font-semibold text-center text-white lg:text-start leading-10 md:leading-[50px]"
+                className="md:text-[35px] text-[30px] xl:text-[40px] font-semibold  text-white lg:text-start leading-10 md:leading-[50px]"
               >
                 African Center for
               </m.h4>
@@ -58,7 +58,7 @@ const Home = () => {
                   duration: 1,
                   x: { duration: 1 },
                 }}
-                className="md:text-[35px] text-[30px] xl:text-[40px] font-semibold text-white  text-center lg:text-start leading-10 md:leading-[50px]"
+                className="md:text-[35px] text-[30px] xl:text-[40px] font-semibold text-white   lg:text-start leading-10 md:leading-[50px]"
               >
                 Technology Law and
               </m.h4>
@@ -69,7 +69,7 @@ const Home = () => {
                   duration: 1.5,
                   x: { duration: 1 },
                 }}
-                className="flex justify-center lg:justify-start"
+                className="flex"
               >
                 <h4 className="md:text-[35px] text-[30px] xl:text-[40px] font-semibold text-white  mr-[10px] leading-10 md:leading-[50px]">
                   Innovation

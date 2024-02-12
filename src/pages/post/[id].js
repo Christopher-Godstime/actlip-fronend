@@ -23,6 +23,7 @@ function Post() {
 
   const { auth, detailPost, socket } = useSelector((state) => state);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     dispatch(getPost({ detailPost, id, auth }));
@@ -32,6 +33,10 @@ function Post() {
       setPost(newArr);
     }
   }, [detailPost, dispatch, id, auth]);
+
+  useEffect(() => {
+    if (!auth.token) history.push("/");
+  }, [auth.token, history]);
 
   return (
     <div className="pb-[50px]">
@@ -59,13 +64,13 @@ function Post() {
         )}
         {post.map((post) => {
           return (
-            <div>
+            <div className="">
               {" "}
               <Carousel images={post.images} id={post._id} />{" "}
-              <h4 className="text-[18px] md:text-[22px] font-[600] leading-[25px] text-gray-700 mt-[20px]">
+              <h4 className="text-[18px] md:text-[22px] font-[600] leading-[28px] text-gray-700 mt-[20px]">
                 {post.head}
               </h4>
-              <h4 className="text-gray-800 text-[14px] mt-[10px]">
+              <h4 className="text-gray-800 text-[14px] mt-[10px] leading-[22px]">
                 {post.content}
               </h4>
               <h4 className="text-[12px] font-[600] mt-[10px]">

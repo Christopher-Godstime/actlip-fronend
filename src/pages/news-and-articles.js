@@ -2,6 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { NavLink, Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { CiSearch } from "react-icons/ci";
+import Carousel from "../components/Carousel";
+import moment from "moment";
+import { getNewsApi } from "../utils/fetchData";
+import { POST_TYPES } from "../redux/actions/postAction";
+import LoadIcon from "../assets/loading.gif";
+import axios from "axios";
+import LoadMoreBtn from "../components/LoadMoreBtn";
 import news3 from "../assets/news3.webp";
 import news4 from "../assets/news4.webp";
 import news5 from "../assets/news5.webp";
@@ -9,11 +16,52 @@ import news6 from "../assets/news6.webp";
 
 const NewsAndArticles = () => {
   const { auth } = useSelector((state) => state);
+  const dispatch = useDispatch();
   const history = useHistory();
+
+  const [load, setLoad] = useState(false);
+  const [data, setData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoad(true);
+        const response = await axios.get(
+          `http://localhost:5000/api/news?limit=${limit}&page=${page}`
+        );
+        setData([...data, ...response.data.posts]);
+        setTotalPages(response.data.totalPages);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoad(false);
+      }
+    };
+
+    fetchData();
+  }, [page, limit]);
+
+  const handleLoadMore = async () => {
+    setPage(page + 1);
+  };
 
   useEffect(() => {
     if (auth.token) history.push("/login");
   }, [auth.token, history]);
+
+  const today = new Date();
+
+  const options = {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  };
+
+  const formattedDate = today.toLocaleDateString("en-US", options);
   return (
     <div>
       <div className="px-[3%] lg:px-[5%] xl:px-[10%] pt-[30px] md:pt-[50px] pb-[50px] bg-gray-100">
@@ -26,7 +74,7 @@ const NewsAndArticles = () => {
         </div>
         <div className="md:flex justify-between mt-[30px] border-double border-b-[3px] border-black pb-[10px]">
           <h4 className="text-[12px] font-[600] font-pirate">
-            Tuesday, February 6, 2024
+            {formattedDate}
           </h4>
           <div className="text-[30px] md:text-[40px] font-[600]">
             News And Articles
@@ -34,74 +82,43 @@ const NewsAndArticles = () => {
           <div></div>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-[20px] gap-x-[40px] mt-[30px]">
-          <div className="grid grid-cols-2 gap-[10px] pb-[20px] border-b-[2px] border-gray-300">
-            <div>
-              <img src={news3} />
+          {data.map((post) => (
+            <div
+              key={post._id}
+              className="grid grid-cols-1 md:grid-cols-2 gap-[10px] pb-[20px] border-b-[2px] border-gray-300"
+            >
+              <Link to={`news-and-articles/${post._id}`}>
+                {post.images.length > 0 && (
+                  <Carousel images={post.images} id={post._id} />
+                )}
+              </Link>
+              <div className="flex flex-col">
+                <h4 className="text-[18px] md:text-[22px] font-[600] leading-[28px] line-clamp-2">
+                  {post.head}
+                </h4>
+                <h4 className="text-gray-800 text-[14px] mt-[10px] line-clamp-4 leading-[22px]">
+                  {post.content}
+                </h4>
+                <h4 className="text-[12px] font-[600] mt-auto pt-[20px]">
+                  {moment(post.createdAt).format("dddd, MMMM D, YYYY")}
+                </h4>
+              </div>
             </div>
-            <div>
-              <h4 className="text-[18px] md:text-[22px] font-[600] leading-[25px]">
-                A Russian Bank Account May Offer Clues to a North Korean Arms
-                Deal
-              </h4>
-              <h4 className="text-gray-800 text-[14px] mt-[10px] line-clamp-2">
-                Moscow may be trying to help Pyongyang access the international
-                financial system in exchange for missiles, U.S.-allied
-              </h4>
-              <h4 className="text-[12px] font-[600] mt-[10px]">
-                Tuesday, February 6, 2024
-              </h4>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-[10px] pb-[20px] border-b-[2px] border-gray-300">
-            <div>
-              <img src={news4} />
-            </div>
-            <div>
-              <h4 className="text-[18px] md:text-[22px] font-[600] leading-[25px]">
-                Discontent and Defiance on the Road to Pakistan’s Election
-              </h4>
-              <h4 className="text-gray-800 text-[14px] mt-[10px] line-clamp-2">
-                The Grand Trunk Road is buzzing with talk of this week’s vote,
-                and of the country’s future.
-              </h4>
-              <h4 className="text-[12px] font-[600] mt-[10px]">
-                Tuesday, February 6, 2024
-              </h4>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-[10px] pb-[20px] border-b-[2px] border-gray-300">
-            <div>
-              <img src={news5} />
-            </div>
-            <div>
-              <h4 className="text-[18px] md:text-[22px] font-[600] leading-[25px]">
-                Discontent and Defiance on the Road to Pakistan’s Election
-              </h4>
-              <h4 className="text-gray-800 text-[14px] mt-[10px] line-clamp-2">
-                The Grand Trunk Road is buzzing with talk of this week’s vote,
-                and of the country’s future.
-              </h4>
-              <h4 className="text-[12px] font-[600] mt-[10px]">
-                Monday, February 5, 2024
-              </h4>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-[10px] pb-[20px] border-b-[2px] border-gray-300">
-            <div>
-              <img src={news6} />
-            </div>
-            <div>
-              <h4 className="text-[18px] md:text-[22px] font-[600] leading-[25px]">
-                Republican-Led House to Vote on Impeaching Mayorkas Over Border
-              </h4>
-              <h4 className="text-gray-800 text-[14px] mt-[10px]  line-clamp-2">
-                With Democrats solidly opposed, Republicans can only lose two of
-                their own members in Tuesday’s vote to impeach Alejandro
-              </h4>
-              <h4 className="text-[12px] font-[600] mt-[10px]">
-                Sunday, February 4, 2024
-              </h4>
-            </div>
+          ))}
+          <div className="mt-[30px]">
+            {load && ( // Display load icon when loading
+              <div className="w-[40px] mx-auto">
+                <img src={LoadIcon} alt="loading" />
+              </div>
+            )}
+            {page < totalPages && !load && (
+              <button
+                className="btn btn-dark mx-auto d-block mb-[20px]"
+                onClick={handleLoadMore}
+              >
+                Load more
+              </button>
+            )}
           </div>
         </div>
       </div>

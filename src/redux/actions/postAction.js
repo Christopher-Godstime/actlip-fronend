@@ -5,6 +5,7 @@ import {
   getDataApi,
   patchDataApi,
   deleteDataApi,
+  getNewsApi,
 } from "../../utils/fetchData";
 import { createNotify, removeNotify } from "./notifyAction";
 
@@ -57,10 +58,29 @@ export const createPost =
     }
   };
 
-export const getPosts = (token) => async (dispatch) => {
+export const getPosts = () => async (dispatch) => {
   try {
     dispatch({ type: POST_TYPES.LOADING_POST, payload: true });
-    const res = await getDataApi("posts", token);
+    const res = await getDataApi("posts");
+
+    dispatch({
+      type: POST_TYPES.GET_POSTS,
+      payload: { ...res.data, page: 2 },
+    });
+
+    dispatch({ type: POST_TYPES.LOADING_POST, payload: false });
+  } catch (err) {
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: { error: err.response.data.msg },
+    });
+  }
+};
+
+export const getNews = () => async (dispatch) => {
+  try {
+    dispatch({ type: POST_TYPES.LOADING_POST, payload: true });
+    const res = await getNewsApi("news");
 
     dispatch({
       type: POST_TYPES.GET_POSTS,
@@ -173,11 +193,27 @@ export const unLikePost =
   };
 
 export const getPost =
-  ({ detailPost, id, auth }) =>
+  ({ detailPost, id }) =>
   async (dispatch) => {
     if (detailPost.every((post) => post._id !== id)) {
       try {
-        const res = await getDataApi(`post/${id}`, auth.token);
+        const res = await getDataApi(`post/${id}`);
+        dispatch({ type: POST_TYPES.GET_POST, payload: res.data.post });
+      } catch (err) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: { error: err?.response?.data?.msg },
+        });
+      }
+    }
+  };
+
+export const getOneNews =
+  ({ detailPost, id }) =>
+  async (dispatch) => {
+    if (detailPost.every((post) => post._id !== id)) {
+      try {
+        const res = await getDataApi(`news/${id}`);
         dispatch({ type: POST_TYPES.GET_POST, payload: res.data.post });
       } catch (err) {
         dispatch({
@@ -189,7 +225,7 @@ export const getPost =
   };
 
 export const deletePost =
-  ({ post, auth, socket }) =>
+  ({ post, auth }) =>
   async (dispatch) => {
     dispatch({ type: POST_TYPES.DELETE_POST, payload: post });
     try {
@@ -203,7 +239,7 @@ export const deletePost =
         url: `/post/${post._id}`,
       };
 
-      dispatch(removeNotify({ msg, auth, socket }));
+      dispatch(removeNotify({ msg, auth }));
     } catch (err) {
       dispatch({
         type: GLOBALTYPES.ALERT,
